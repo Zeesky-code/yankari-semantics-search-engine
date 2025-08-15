@@ -2,6 +2,7 @@ import os
 import dotenv
 from src.data_processor import prepare_data
 from src.embedder import generate_embeddings
+from src.search_index import create_index, semantic_search
 
 # --- Project Configuration ---
 INPUT_FILE_PATH = os.path.join('data', 'raw', 'yankari_data.csv')
