@@ -1,5 +1,7 @@
 import os
+import dotenv
 from src.data_processor import prepare_data
+from src.embedder import generate_embeddings
 
 # --- Project Configuration ---
 INPUT_FILE_PATH = os.path.join('data', 'raw', 'yankari_data.csv')
@@ -12,6 +14,11 @@ def main():
     The main function to run the entire semantic search pipeline.
     """
     print("Starting Yoruba Semantic Search Engine pipeline...")
+    dotenv.load_dotenv()
+    cohere_api_key = os.getenv('COHERE_API_KEY')
+    if not cohere_api_key:
+        print("Error: COHERE_API_KEY environment variable is not set.")
+        sys.exit(1)
 
     os.makedirs(os.path.dirname(OUTPUT_FILE_PATH), exist_ok=True)
     os.makedirs(os.path.dirname(FAISS_INDEX_PATH), exist_ok=True)
@@ -20,8 +27,7 @@ def main():
     prepare_data(INPUT_FILE_PATH, OUTPUT_FILE_PATH)
     
     # Step 2: Embedding Generation
-    # TODO: Implement the embedding generation logic in src/embedder.py
-    # embedder.generate_embeddings(OUTPUT_FILE_PATH, EMBEDDINGS_FILE_PATH)
+    generate_embeddings(OUTPUT_FILE_PATH, EMBEDDINGS_FILE_PATH, cohere_api_key)
 
     # Step 3: FAISS Index Creation
     # TODO: Implement the FAISS indexing logic in src/search_index.py
