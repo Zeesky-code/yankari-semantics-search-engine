@@ -15,7 +15,6 @@ def generate_embeddings(input_csv_path, output_embeddings_path, cohere_api_key):
     """
     print("--- Step 2: Generating embeddings with Cohere API ---")
     
-    # Load the prepared data
     try:
         df = pd.read_csv(input_csv_path)
     except FileNotFoundError:
@@ -28,14 +27,13 @@ def generate_embeddings(input_csv_path, output_embeddings_path, cohere_api_key):
     embeddings = []
     metadata = df.to_dict('records')
     
-    # Batch size is set to 64 as per the plan
     batch_size = 64
     for i in range(0, len(texts), batch_size):
         batch_texts = texts[i:i + batch_size]
         
-        # Use exponential backoff to handle rate limits
+
         attempt = 0
-        while attempt < 5:
+        while attempt < 6:
             try:
                 response = co.embed(
                     model='embed-multilingual-v3.0',
@@ -56,20 +54,19 @@ def generate_embeddings(input_csv_path, output_embeddings_path, cohere_api_key):
             print(f"Failed to process batch after multiple retries. Exiting.")
             return
 
-    # Check if we got all embeddings
+        time.sleep(2)
+
+
     if len(embeddings) != len(texts):
         print("Warning: Number of embeddings does not match number of texts.")
         return
         
-    # Combine embeddings and metadata into a single object
     embeddings_data = {
         'embeddings': embeddings,
         'metadata': metadata
     }
     
-    # Save the embeddings data to disk using pickle
     with open(output_embeddings_path, 'wb') as f:
         pickle.dump(embeddings_data, f)
     
     print(f"\nEmbeddings for {len(embeddings)} articles saved to '{output_embeddings_path}'.")
-    
