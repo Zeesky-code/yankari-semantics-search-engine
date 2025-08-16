@@ -38,8 +38,8 @@ def main():
     else:
         print(f"FAISS index found at '{FAISS_INDEX_PATH}'. Skipping Step 3.")
     
-    sample_query = "Climate change in Africa"
-    search_results = semantic_search(sample_query, cohere_api_key, EMBEDDINGS_FILE_PATH, FAISS_INDEX_PATH)
+    sample_query = "Traditional festivals"
+    search_results = semantic_search(sample_query, EMBEDDINGS_FILE_PATH, FAISS_INDEX_PATH)
 
     print("\n--- Search Results ---")
     if search_results:
