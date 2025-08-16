@@ -29,7 +29,7 @@ def main():
         print(f"Prepared data found at '{OUTPUT_FILE_PATH}'. Skipping Step 1.")
     
     if not os.path.exists(EMBEDDINGS_FILE_PATH):
-        generate_embeddings(OUTPUT_FILE_PATH, EMBEDDINGS_FILE_PATH, cohere_api_key)
+        generate_embeddings(OUTPUT_FILE_PATH, EMBEDDINGS_FILE_PATH)
     else:
         print(f"Embeddings found at '{EMBEDDINGS_FILE_PATH}'. Skipping Step 2.")
 

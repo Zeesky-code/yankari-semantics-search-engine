@@ -12,8 +12,7 @@ def create_index(embeddings_path, index_path):
         index_path (str): Path to save the FAISS index.
     """
     print("--- Step 3: Building FAISS index ---")
-    
-    # Load the embeddings and metadata
+
     try:
         with open(embeddings_path, 'rb') as f:
             embeddings_data = pickle.load(f)
@@ -25,14 +24,9 @@ def create_index(embeddings_path, index_path):
     
     d = embeddings.shape[1]
     
-    # Choose an appropriate FAISS index
-    # For a small to medium-sized dataset, an IndexFlatL2 is fast and simple.
     index = faiss.IndexFlatL2(d)
-    
-    # Add the embeddings to the index
     index.add(embeddings)
     
-    # Save the index to disk
     faiss.write_index(index, index_path)
     print(f"FAISS index built and saved to '{index_path}'.")
 
